@@ -11,7 +11,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import { connect } from 'react-redux'; 
-import { getlocation } from '../Actions';
+import { getlocation, googleIconClick, getAlipayImage } from '../Actions';
+import SpeechRecognition from './SpeechRecognition';
 
 const styles = theme => ({
   root: {
@@ -33,6 +34,10 @@ class NestedList extends React.Component {
 
   handleIconClick = () => {
     this.props.getlocation()
+  }
+
+  handleGoogleIconClick = (type) => {
+    this.props.googleIconClick(type)
   }
 
   render() {
@@ -79,13 +84,36 @@ class NestedList extends React.Component {
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
-                <ListItemText onClick={this.handleIconClick} inset primary="Asian Grocery" />
+                <ListItemText onClick={() => this.handleGoogleIconClick('Asian Grocery')} inset primary="Asian Grocery" />
               </ListItem>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
-                <ListItemText inset primary="Asian Restaurants" />
+                <ListItemText onClick={() => this.handleGoogleIconClick('Asian Restaurants')} inset primary="Asian Restaurants" />
+              </ListItem>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <StarBorder />
+                </ListItemIcon>
+                <SpeechRecognition />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem button onClick={this.handleClick}>
+            <ListItemIcon>
+              <LocationOn />
+            </ListItemIcon>
+            <ListItemText inset primary="Suburb Info" />
+            {this.state.open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <StarBorder />
+                </ListItemIcon>
+                <ListItemText onClick={() => this.handleGoogleIconClick('Asian Grocery')} inset primary="Asian demography" />
               </ListItem>
             </List>
           </Collapse>
@@ -99,4 +127,4 @@ NestedList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)( connect(null, {getlocation})(NestedList));
+export default withStyles(styles)( connect(null, {getlocation, googleIconClick })(NestedList));

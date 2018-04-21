@@ -5,48 +5,22 @@ import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClust
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import icon from '../resources/css/img/nab_atm.jpeg';
+import AlipayScreen from './AlipayScreen';
+import { getAlipayImage } from '../Actions';
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
-
-// const mapTypeControlOptions = 
-
-// const zoomControlOptions = {
-//     position: window.google.maps.ControlPosition.LEFT_CENTER
-// }
-
-// mapTypeControlOptions={mapTypeControlOptions}
-
-// zoomControlOptions={zoomControlOptions}
 
 const GettingStartedGoogleMap = withScriptjs(
 	withGoogleMap(props => (
 		<GoogleMap ref={props.onMapLoad} zoom={props.zoom} center={props.center} onClick={props.onMapClick} >
 
-            <SearchBox
-                ref={props.onSearchBoxMounted}
-                bounds={props.bounds}
-                controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
-                onPlacesChanged={props.onPlacesChanged}
-            >
-            <input
-                onChange={props.simulateOnChange}
-                type="text"
-                placeholder="Search other places"
-                value={props.simulateSearchVal}
-                style={{
-                    boxSizing: `border-box`,
-                    border: `1px solid transparent`,
-                    width: `240px`,
-                    height: `32px`,
-                    marginTop: `27px`,
-                    padding: `0 12px`,
-                    borderRadius: `3px`,
-                    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                    fontSize: `14px`,
-                    outline: `none`,
-                    textOverflow: `ellipses`,
-                }}
-            />
-            </SearchBox>
+            <MarkerClusterer averageCenter enableRetinaIcons={true} gridSize={30} zoomOnClick={false} >
+                    {props.googleLocationMarkers.map((marker, index) =>
+                        <Marker key={index} position={marker.position} 
+                                onClick={() => props.onVendorMarkerClick(marker)}
+                        />
+                    )}
+        	</MarkerClusterer> 
+
 			{/* {props.polygons.map((polygon, index) => (
 				<Polygon
 					path={polygon.coords}
@@ -74,7 +48,7 @@ const GettingStartedGoogleMap = withScriptjs(
 						onClick={() => props.onMarkerClick(marker)}
 					/>
 				))}
-        	</MarkerClusterer> */}
+        	</MarkerClusterer> 
 		</GoogleMap>
 	))
 );
@@ -88,21 +62,12 @@ class Map extends Component {
                 lat: -37.745344, 
                 lng: 144.935107
             }, 
-            zoom : 8
+            zoom : 8, 
+            googleLocationMarkers: [], 
+            open : false
         }
 	}
-
-	componentDidMount() {
-		// this.props.changeZoomCenter({
-		// 	center: {
-		// 		lat: 15.011064944887153,
-		// 		lng: 76.95246969112031
-		// 	}, 
-		// 	zoom: 6
-		// })
-		//this.props.getPolygons();
-	}
-
+    
 	handleMapLoad(map) {
 		this._mapComponent = map;
 	}
@@ -111,12 +76,37 @@ class Map extends Component {
 		console.log(event.latLng.lat(), event.latLng.lng());
     }
 
-    component
-    
-    simulateOnChange(){
+    callback(results, status) {
+        if (status == window.google.maps.places.PlacesServiceStatus.OK) {
+            const markerData = results.map( el => {
+                return {
+                    id: el.id, 
+                    position: {
+                        lat: el.geometry.location.lat(), 
+                        lng: el.geometry.location.lng()
+                    }
+                }
+            });
+            this.setState({ googleLocationMarkers: markerData })
+        }
+      }
 
+    componentWillReceiveProps(nextProps){
+          const map = this._mapComponent.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var request = {
+            bounds: map.getBounds(),
+            keyword: nextProps.googleLocation
+          };
+          const service = new window.google.maps.places.PlacesService(map);
+          service.radarSearch(request, this.callback.bind(this));
     }
 
+    onVendorMarkerClick(){
+        this.setState({ open: true})
+
+        this.props.getAlipayImage('AUD', '10');
+    }
+    
 	render() {
 		return (
 			<div style={{ height: '100vh' }}>
@@ -131,8 +121,10 @@ class Map extends Component {
 					onMapLoad={map => this.handleMapLoad(map)}
 					onMapClick={e => this.handleMapClick(e)}
 					zoom={this.state.zoom}
-                    simulateSearchVal="Asian groceries near me"
+                    googleLocationMarkers={this.state.googleLocationMarkers}
+                    onVendorMarkerClick={this.onVendorMarkerClick.bind(this)}
 				/>
+                <AlipayScreen open={this.state.open}/>
 			</div>
 		);
 	}
@@ -144,13 +136,13 @@ class Map extends Component {
 /* markers={this.props.markers}
 polygons={this.props.polygons} */
 
-const mapStateToProps = ({ locationState }) => {
-    console.log(locationState);
+const mapStateToProps = ({ locationState, googleLocationState }) => {
 	return {
-		markers: locationState.atm
+        markers: locationState.atm, 
+        googleLocation: googleLocationState.googleLocation
 	};
 };
 
 // polygons: mapState.polygons, 
 
-export default connect(mapStateToProps)(Map);
+export default connect(mapStateToProps, {getAlipayImage})(Map);
