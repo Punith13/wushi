@@ -16,7 +16,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import Map from './Map';
-import DrawerMenu from './DrawerMenu';
+import NestedList from './NestedList';
 
 const drawerWidth = 240;
 
@@ -138,7 +138,7 @@ class PersistentDrawer extends React.Component {
           </IconButton>
         </div>
         <Divider />
-        <DrawerMenu />
+        <NestedList />
       </Drawer>
     );
 
