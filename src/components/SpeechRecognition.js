@@ -9,13 +9,12 @@ import SettingsVoice from '@material-ui/icons/SettingsVoice';
 import { connect } from 'react-redux';
 import { googleIconClick } from '../Actions';
 import { googleTranslateProjectId } from '../constants';
-const Translate = require('@google-cloud/translate');
 
-const projectId = googleTranslateProjectId;
+// const projectId = googleTranslateProjectId;
 
-const translate = new Translate({
-	projectId: projectId
-});
+// const translate = new Translate({
+// 	projectId: projectId
+// });
 
 const styles = theme => ({
 	root: {
