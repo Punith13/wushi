@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Modal from 'material-ui/Modal';
+import List, { ListItem } from 'material-ui/List';
+import { openCloseModal } from '../Actions';
 
 
 function rand() {
@@ -33,7 +35,7 @@ const styles = theme => ({
 
 class SimpleModal extends React.Component {
   state = {
-    open: false,
+    open: true,
   };
 
   handleOpen = () => {
@@ -41,14 +43,11 @@ class SimpleModal extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.props.openCloseModal(false);
   };
 
   render() {
     const { classes } = this.props;
-
-    console.log(this.props.alipayImage);
-
     return (
       <div>
         <Modal
@@ -58,12 +57,25 @@ class SimpleModal extends React.Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Powered by Wushi - Alipay
-            </Typography>
-            <Typography variant="display1" gutterBottom>
-                Pay : AUD $10
-            </Typography>
+            <List
+                component="nav"
+            >
+            <ListItem>
+                <Typography variant="headline" id="modal-title">
+                Powered by Wushi - Alipay
+                </Typography>
+            </ListItem>
+            <ListItem>
+                <Typography variant="title" id="modal-title">
+                    Tong's Garden
+                </Typography>
+            </ListItem>
+            <ListItem>
+                <Typography variant="display1" gutterBottom>
+                    Pay : AUD $10
+                </Typography>
+            </ListItem>
+            </List>
             { this.props.alipayImage && <img src={this.props.alipayImage} alt="scan code" style={{ width: '200px', height: '200px' }} /> }
             { !this.props.alipayImage &&  <Typography variant="subheading" gutterBottom> Generating Scan code... </Typography> }
             <SimpleModalWrapped />
@@ -79,15 +91,12 @@ SimpleModal.propTypes = {
 };
 
 const mapStateToProps = ({ alipayState }) => {
-
-    console.log('reached mapstatetoprops' , alipayState.alipayImage);
-
     return { 
         alipayImage: alipayState.alipayImage
     }
 }
 
 // We need an intermediary variable for handling the recursive nesting.
-const SimpleModalWrapped = withStyles(styles)(connect(mapStateToProps)(SimpleModal));
+const SimpleModalWrapped = withStyles(styles)(connect(mapStateToProps, {openCloseModal})(SimpleModal));
 
 export default SimpleModalWrapped;

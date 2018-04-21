@@ -6,8 +6,9 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import icon from '../resources/css/img/nab_atm.jpeg';
 import AlipayScreen from './AlipayScreen';
-import { getAlipayImage } from '../Actions';
+import { getAlipayImage, openCloseModal } from '../Actions';
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+
 
 const GettingStartedGoogleMap = withScriptjs(
 	withGoogleMap(props => (
@@ -59,10 +60,10 @@ class Map extends Component {
         
         this.state = {
             center : {
-                lat: -37.745344, 
-                lng: 144.935107
+                lat: -37.790885, 
+                lng: 144.972784
             }, 
-            zoom : 8, 
+            zoom : 12, 
             googleLocationMarkers: [], 
             open : false
         }
@@ -101,9 +102,8 @@ class Map extends Component {
           service.radarSearch(request, this.callback.bind(this));
     }
 
-    onVendorMarkerClick(){
-        this.setState({ open: true})
-
+    onVendorMarkerClick(marker){
+        this.props.openCloseModal(true);
         this.props.getAlipayImage('AUD', '10');
     }
     
@@ -124,7 +124,7 @@ class Map extends Component {
                     googleLocationMarkers={this.state.googleLocationMarkers}
                     onVendorMarkerClick={this.onVendorMarkerClick.bind(this)}
 				/>
-                <AlipayScreen open={this.state.open}/>
+                <AlipayScreen open={this.props.open}/>
 			</div>
 		);
 	}
@@ -136,13 +136,14 @@ class Map extends Component {
 /* markers={this.props.markers}
 polygons={this.props.polygons} */
 
-const mapStateToProps = ({ locationState, googleLocationState }) => {
+const mapStateToProps = ({ locationState, googleLocationState, alipayState }) => {
 	return {
         markers: locationState.atm, 
-        googleLocation: googleLocationState.googleLocation
+        googleLocation: googleLocationState.googleLocation,
+        open: alipayState.open
 	};
 };
 
 // polygons: mapState.polygons, 
 
-export default connect(mapStateToProps, {getAlipayImage})(Map);
+export default connect(mapStateToProps, {getAlipayImage, openCloseModal})(Map);

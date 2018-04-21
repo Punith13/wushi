@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GETTING_ALIPAY_IMAGE } from './ActionTypes';
+import { GETTING_ALIPAY_IMAGE, OPEN_CLOSE_MODAL } from './ActionTypes';
 const md5 = require('md5');
 const parseString = require('xml2js').parseString;
 
@@ -25,4 +25,11 @@ export const getAlipayImage = (currency, money) => async dispatch => {
             payload: result.alipay.response[0].alipay[0].pic_url[0]
         })
     });
+}
+
+export const openCloseModal = (action) => {
+    return{
+        type: OPEN_CLOSE_MODAL, 
+        payload: action
+    }
 }
