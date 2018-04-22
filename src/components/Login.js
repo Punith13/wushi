@@ -54,11 +54,11 @@ export class Inputs extends Component {
 						<div
 							style={{
 								display: 'block',
-								marginLeft: '30px'
+								marginLeft: '20px'
 							}}
 						>
 							<ListItem>
-								<img src={Logo} style={{ width: '200px', height: '200px' }} />
+								<img src={Logo} style={{ width: '250px', height: '250px' }} />
 							</ListItem>
 							<ListItem>
 								<Avatar>
