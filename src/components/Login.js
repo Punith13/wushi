@@ -65,7 +65,7 @@ export class Inputs extends Component {
 									<AccountCircle />
 								</Avatar>
 								<Input
-									placeholder="Username"
+									placeholder="Username 用户名"
 									className={classes.input}
 									inputProps={{
 										'aria-label': 'Description'
@@ -78,7 +78,7 @@ export class Inputs extends Component {
 								</Avatar>
 								<Input
 									type="password"
-									placeholder="Password"
+									placeholder="Password 密码"
 									className={classes.input}
 									inputProps={{
 										'aria-label': 'Description'
@@ -99,7 +99,7 @@ export class Inputs extends Component {
 									color="primary"
 									className={classes.button}
 								>
-									Login
+									{`Login 登录`}
 								</Button>
 								{this.state.login && <Redirect to="/platform" />}
 							</ListItem>

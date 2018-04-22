@@ -66,13 +66,13 @@ class NestedList extends React.Component {
 								<ListItemIcon>
 									<StarBorder />
 								</ListItemIcon>
-								<ListItemText onClick={this.handleIconClick} inset primary="NAB ATM" />
+								<ListItemText onClick={this.handleIconClick} inset primary="NAB ATM 自动取款机" />
 							</ListItem>
 							<ListItem button className={classes.nested}>
 								<ListItemIcon>
 									<StarBorder />
 								</ListItemIcon>
-								<ListItemText inset primary="NAB Branch" />
+								<ListItemText inset primary="NAB Branch 银行" />
 							</ListItem>
 						</List>
 					</Collapse>
@@ -92,7 +92,7 @@ class NestedList extends React.Component {
 								<ListItemText
 									onClick={() => this.handleGoogleIconClick('Asian Grocery')}
 									inset
-									primary="Asian Grocery"
+									primary="Asian Grocery 杂货"
 								/>
 							</ListItem>
 							<ListItem button className={classes.nested}>
@@ -102,7 +102,7 @@ class NestedList extends React.Component {
 								<ListItemText
 									onClick={() => this.handleGoogleIconClick('Asian Restaurants')}
 									inset
-									primary="Asian Restaurants"
+									primary="Restaurants 餐厅"
 								/>
 							</ListItem>
 						</List>
