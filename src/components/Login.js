@@ -77,6 +77,7 @@ export class Inputs extends Component {
 									<Lock />
 								</Avatar>
 								<Input
+									type="password"
 									placeholder="Password"
 									className={classes.input}
 									inputProps={{
