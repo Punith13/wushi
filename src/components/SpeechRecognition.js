@@ -54,7 +54,9 @@ class Dictaphone extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { transcript, resetTranscript, browserSupportsSpeechRecognition } = this.props;
+		const { transcript, resetTranscript, browserSupportsSpeechRecognition, startListening } = this.props;
+
+		startListening();
 
 		if (!browserSupportsSpeechRecognition) {
 			return null;
